@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
   console.log("hello Word")
   getProducts(req);
 });
+
 app.use('/post', saveProduct);
 app.post('/post', (req, res) => {
   console.log("hello Word");
