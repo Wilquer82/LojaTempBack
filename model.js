@@ -1,15 +1,20 @@
-
 const connection = require('./connection');
 
 const saveProduct = async ({ data }) => {
   const db = await connection();
 
   try {
-    const newProduct = db.collection('Produtos')
-      .insertOne(data);
-    return newProduct.insertedId; //Retirar esse inserted para testar
+    const existingProduct = await db.collection('Produtos')
+      .findOne({ product: data.product });
+
+    if (existingProduct) {
+      throw new Error('Já existe um produto com esse nome');
+    }
+    await db.collection('Produtos').insertOne(data);
+      return { success: true, message: 'Produto salvo com sucesso' };
   } catch (error) {
     console.log(error);
+    return { success: false, message: 'Erro ao salvar produto' };
   } finally {
     if (db) {
       db.close();
@@ -17,38 +22,37 @@ const saveProduct = async ({ data }) => {
   }
 };
 
-const getProducts = async () => {
-  const db = await connection();
-  console.log("entrou no get");
-  return await db.collection('Produtos').find().toArray();
+const putProduct = async (req, res) => {  
+  console.log("entrou no model");
+  console.log("req", req);
+  console.log("res", res);
+  const existingProduct = await db.collection('Produtos').findOne({ product: req });
+  console.log(existingProduct);
+  // try {
+  //     const { product } = req.params;
+  //     const { quantity, value } = req.body;
+
+  //     const updatedProduct = await Product.findOneAndUpdate(
+  //       product,
+  //       { []: value },
+  //       { new: true }
+  //     );
+
+  //     res.status(200).json(updatedProduct);
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ message: 'Internal server error' });
+  //   }
+  // },
 };
 
-const pathProduct = async (id) => {
-    const db = await connection();
-      db.collection('Produtos').updateOne({ _id: ObjectID(id) }, { $set: update }, (err, result) => {
-        assert.equal(null, err);
-        console.log(`Produto ${id} atualizado com sucesso na coleção Produtos`);
-        client.close();
-        res.status(200).send(`Produto ${id} atualizado com sucesso na coleção Produtos`);
-      });
-}
-
-
-// const findOneProduct = async (product) => {
-//   console.log("model", product)
-//   const db = await connection();
-//   try {
-//     const result = await db.collection('Produtos').findOne({product: product});
-//     console.log(result);
-//     return result;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+const getProducts = async () => {
+  const db = await connection();
+  return await db.collection('Produtos').find().toArray();
+};
 
 module.exports = {
   saveProduct,
   getProducts,
-  pathProduct,
-  // findOneProduct,
+  putProduct,
 };
