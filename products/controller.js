@@ -22,12 +22,9 @@ exports.getProducts = async (req, res) => {
 };
 
 // controlador para alterar um produto
-exports.putProduct = async (req, res) => {
-  console.log("entrou no controller");
-  console.log(req)
+exports.putProduct = async (data) => {
   try {
-    const products = await Product.putProduct(req);
-    console.log(products);
+    const products = await Product.putProduct(data);
     return res.json(products);
   } catch (err) {
     // res.status(500).json({ message: err.message });

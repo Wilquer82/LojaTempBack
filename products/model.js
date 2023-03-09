@@ -1,12 +1,10 @@
-const connection = require('./connection');
+const connection = require('../connection');
 
 const saveProduct = async ({ data }) => {
   const db = await connection();
-
   try {
     const existingProduct = await db.collection('Produtos')
       .findOne({ product: data.product });
-
     if (existingProduct) {
       throw new Error('Já existe um produto com esse nome');
     }
@@ -22,28 +20,18 @@ const saveProduct = async ({ data }) => {
   }
 };
 
-const putProduct = async (req, res) => {  
-  console.log("entrou no model");
-  console.log("req", req);
-  console.log("res", res);
-  const existingProduct = await db.collection('Produtos').findOne({ product: req });
-  console.log(existingProduct);
-  // try {
-  //     const { product } = req.params;
-  //     const { quantity, value } = req.body;
+const putProduct = async (data, res) => {  
+  const db = await connection();
 
-  //     const updatedProduct = await Product.findOneAndUpdate(
-  //       product,
-  //       { []: value },
-  //       { new: true }
-  //     );
-
-  //     res.status(200).json(updatedProduct);
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).json({ message: 'Internal server error' });
-  //   }
-  // },
+  try {
+    const existingProduct = await db.collection('Produtos').findOne({ product: data.produto });
+    const filter = { product : data.produto}
+    const newValue = parseInt(data.valor.value) + parseInt(existingProduct.quantity);
+    const updatedProduct = await db.collection('Produtos').findOneAndUpdate(
+      filter, {$set: { quantity: newValue }});
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getProducts = async () => {
