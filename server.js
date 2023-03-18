@@ -1,12 +1,13 @@
-const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const cors = require('cors')
 const PORT = process.env.PORT || 3001;
-const { getProducts, saveProduct, putProduct } = require("./products/controller");
-const { saveUser } = require("./users/controller");
-const connection = require("./connection.js")
+const { getProducts, saveProduct, putProduct, delProduct } = require("./products/controller");
+const { saveUser, loginUser } = require("./users/controller");
+const { saveMoviment, getMoviment } = require("./movimento/controller");
+const connection = require("./connection.js");
+const { saveClient, getClients } = require('./clientes/controller');
 
 const options = {
     methods: ['GET','POST','PUT','DELETE'],
@@ -19,13 +20,16 @@ app.use(cors(options));
 
 connection();
 
-///////////////////////// Produtos
+///////////////////////// PRODUTOS
 
 app.post('/post', saveProduct);
 app.use('/post', saveProduct);
 
 app.get('/', getProducts);
-app.use('/get', getProducts)
+app.use('/get', getProducts);
+
+app.delete('/delete/:product', delProduct);
+app.use('/delete/:product', delProduct);
 
 app.put('/product/:product', async (req, res) => {
   const produto = req.params.product;
@@ -35,11 +39,29 @@ app.put('/product/:product', async (req, res) => {
   putProduct(package);
 });
 
-////////////////////////////////////////////////////////////////
+/////////////////////////////Usuários
 
 app.post('/user', saveUser);
 app.use('/user', saveUser);
 
+app.post('/login', loginUser);
+app.use('/login', loginUser);
+
+/////////////////////////////Usuários
+
+app.post('/client', saveClient);
+app.use('/client', saveClient);
+
+app.get('/clients/', getClients);
+app.use('/clients/', getClients);
+
+///////////////////////////////MOVIMENTO
+
+app.post('/moviment', saveMoviment);
+app.use('/moviment', saveMoviment);
+
+app.get('/:date', getMoviment);
+app.use('/:date', getMoviment);
 
 
 server.listen(PORT, () => {

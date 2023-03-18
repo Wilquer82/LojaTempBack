@@ -1,4 +1,6 @@
+const bcrypt = require('bcrypt');
 const connection = require('../connection');
+
 
 const saveUser = async ({ data }) => {
   const db = await connection();
@@ -8,6 +10,13 @@ const saveUser = async ({ data }) => {
     if (existUser) {
       throw new Error('Já existe um Usuário com esse nome');
     }
+
+    const password = data.password;
+
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+    data.password = hashedPassword;
+    
     await db.collection('Login').insertOne(data);
       return { success: true, message: 'Usuário salvo com sucesso' };
   } catch (error) {
@@ -21,14 +30,7 @@ const saveUser = async ({ data }) => {
 };
 
 
-
-// const getProducts = async () => {
-//   const db = await connection();
-//   return await db.collection('Produtos').find().toArray();
-// };
-
 module.exports = {
   saveUser,
-  // getProducts,
-  // putProduct,
+
 };

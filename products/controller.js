@@ -1,7 +1,5 @@
 const Product = require('./model.js');
 
-
-// controlador para criar um novo produto
 exports.saveProduct = async (req, res) => {
   try {
     const newProduct = await Product.saveProduct(req.body);
@@ -11,7 +9,6 @@ exports.saveProduct = async (req, res) => {
   }
 };
 
-// controlador para listar todos os produtos
 exports.getProducts = async (req, res) => {
   try {
     const products = await Product.getProducts();
@@ -21,10 +18,18 @@ exports.getProducts = async (req, res) => {
   }
 };
 
-// controlador para alterar um produto
 exports.putProduct = async (data) => {
   try {
     const products = await Product.putProduct(data);
+    return res.json(products);
+  } catch (err) {
+    // res.status(500).json({ message: err.message });
+  }
+};
+
+exports.delProduct = async (data) => {
+  try {
+    const products = await Product.delProduct(data.params.product);
     return res.json(products);
   } catch (err) {
     // res.status(500).json({ message: err.message });

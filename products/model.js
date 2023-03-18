@@ -34,6 +34,16 @@ const putProduct = async (data, res) => {
   }
 };
 
+const delProduct = async (data, res) => {  
+  const db = await connection();
+  try {
+    await db.collection('Produtos').deleteOne({ product: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 const getProducts = async () => {
   const db = await connection();
   return await db.collection('Produtos').find().toArray();
@@ -43,4 +53,5 @@ module.exports = {
   saveProduct,
   getProducts,
   putProduct,
+  delProduct,
 };
