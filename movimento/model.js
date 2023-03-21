@@ -1,9 +1,9 @@
 const connection = require('../connection');
 
-const saveMoviment = async ({ data }) => {
+const saveMoviment = async ( data ) => {
   const db = await connection();
   try {
-    await db.collection('Movimento').insertOne(data);
+    await db.collection('FluxoCaixa').insertOne(data);
       return { success: true, message: 'Produto salvo com sucesso' };
   } catch (error) {
     console.log(error);
@@ -17,7 +17,8 @@ const saveMoviment = async ({ data }) => {
 
 const getMoviment = async () => {
   const db = await connection();
-  return await db.collection('Movimento').find().toArray();
+  const data = await db.collection('FluxoCaixa').find().toArray();
+  return data
 };
 
 module.exports = {

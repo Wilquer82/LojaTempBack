@@ -20,7 +20,7 @@ app.use(cors(options));
 
 connection();
 
-///////////////////////// PRODUTOS
+//=================================PRODUTOS===================================
 
 app.post('/post', saveProduct);
 app.use('/post', saveProduct);
@@ -39,7 +39,7 @@ app.put('/product/:product', async (req, res) => {
   putProduct(package);
 });
 
-/////////////////////////////Usuários
+//--------------------------------Usuários--------------------------------
 
 app.post('/user', saveUser);
 app.use('/user', saveUser);
@@ -47,21 +47,21 @@ app.use('/user', saveUser);
 app.post('/login', loginUser);
 app.use('/login', loginUser);
 
-/////////////////////////////Usuários
+//--------------------------------Clientes--------------------------------
 
 app.post('/client', saveClient);
 app.use('/client', saveClient);
 
-app.get('/clients/', getClients);
-app.use('/clients/', getClients);
+app.get('/clients', getClients);
+app.use('/clients', getClients);
 
-///////////////////////////////MOVIMENTO
+//-------------------------------MOVIMENTO----------------------------------
 
 app.post('/moviment', saveMoviment);
 app.use('/moviment', saveMoviment);
 
-app.get('/:date', getMoviment);
-app.use('/:date', getMoviment);
+app.get('/getmov', getMoviment);
+app.use('/getmov', getMoviment);
 
 
 server.listen(PORT, () => {

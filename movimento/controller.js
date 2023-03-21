@@ -12,8 +12,8 @@ exports.saveMoviment = async (req, res) => {
 
 exports.getMoviment = async (req, res) => {
   try {
-    const products = await Moviment.getMoviment();
-    return res.json(products);
+    const moviment = await Moviment.getMoviment();
+    return res.json(moviment);
   } catch (err) {
     // res.status(500).json({ message: err.message });
   }
