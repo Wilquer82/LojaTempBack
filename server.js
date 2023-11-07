@@ -7,7 +7,7 @@ const { getProducts, saveProduct, putProduct, delProduct } = require("./products
 const { saveUser, loginUser } = require("./users/controller");
 const { saveMoviment, getMoviment } = require("./movimento/controller");
 const connection = require("./connection.js");
-const { saveClient, getClients } = require('./clientes/controller');
+const { saveClient, getClients, delClient } = require('./clientes/controller');
 
 const options = {
     methods: ['GET','POST','PUT','DELETE'],
@@ -54,6 +54,9 @@ app.use('/client', saveClient);
 
 app.get('/clients', getClients);
 app.use('/clients', getClients);
+
+app.delete('/delete/:client', delClient);
+app.use('/delete/:client', delClient);
 
 //-------------------------------MOVIMENTO----------------------------------
 

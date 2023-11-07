@@ -26,7 +26,17 @@ const getClients = async () => {
   return await db.collection('Clientes').find().toArray();
 };
 
+const delClient = async (data, res) => {  
+  const db = await connection();
+  try {
+    await db.collection('Clientes').deleteOne({ client: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   saveClient,
   getClients,
+  delClient,
 };
