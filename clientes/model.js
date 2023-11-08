@@ -26,10 +26,10 @@ const getClients = async () => {
 };
 
 const delClient = async (data) => {  
-  console.log(data)
+  console.log(data, "MODEL")
   const db = await connection();
   try {
-    await db.collection('Clientes').deleteOne({ 'client.nome': data });
+    await db.collection('Clientes').deleteOne({ 'nome': data });
   } catch (error) {
     console.log(error);
   }

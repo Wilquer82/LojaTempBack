@@ -18,12 +18,11 @@ exports.getClients = async (req, res) => {
   }
 };
 
-exports.delClient = async (data) => {
-  console.log(data)
+exports.delClient = async (req, res) => {
   try {
-    const clients = await Client.delClient(data.params.client);
-    return res.json(clients);
+    await Client.delClient(req.params.client);
+    return res.json({ success: true, message: 'Cliente deletado com sucesso' });
   } catch (err) {
-    // res.status(500).json({ message: err.message });
+    return res.status(500).json({ success: false, message: err.message });
   }
 };
