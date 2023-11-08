@@ -1,7 +1,6 @@
 const connection = require('../connection');
 
 const saveClient = async ({ data }) => {
-  console.log(data, "model");
   const db = await connection();
   try {
     const existingClient = await db.collection('Clientes')

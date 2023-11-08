@@ -28,8 +28,8 @@ app.use('/post', saveProduct);
 app.get('/', getProducts);
 app.use('/get', getProducts);
 
-app.delete('/delete/:product', delProduct);
-app.use('/delete/:product', delProduct);
+// app.delete('/delete/:product', delProduct);
+// app.use('/delete/:product', delProduct);
 
 app.put('/product/:product', async (req, res) => {
   const produto = req.params.product;
