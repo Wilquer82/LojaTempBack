@@ -3,7 +3,7 @@ const app = express();
 const server = require('http').createServer(app);
 const cors = require('cors')
 const PORT = process.env.PORT || 3001;
-const { getProducts, saveProduct, putProduct, delProduct } = require("./products/controller");
+// const { getProducts, saveProduct, putProduct } = require("./products/controller");
 const { saveUser, loginUser } = require("./users/controller");
 const { saveMoviment, getMoviment } = require("./movimento/controller");
 const connection = require("./connection.js");
@@ -22,22 +22,22 @@ connection();
 
 //=================================PRODUTOS===================================
 
-app.post('/post', saveProduct);
-app.use('/post', saveProduct);
+// app.post('/post', saveProduct);
+// app.use('/post', saveProduct);
 
-app.get('/', getProducts);
-app.use('/get', getProducts);
+// app.get('/', getProducts);
+// app.use('/get', getProducts);
 
 // app.delete('/delete/:product', delProduct);
 // app.use('/delete/:product', delProduct);
 
-app.put('/product/:product', async (req, res) => {
-  const produto = req.params.product;
-  const valor = req.body;
+// app.put('/product/:product', async (req, res) => {
+//   const produto = req.params.product;
+//   const valor = req.body;
   
-  const package = { produto, valor }
-  putProduct(package);
-});
+//   const package = { produto, valor }
+//   putProduct(package);
+// });
 
 //--------------------------------Usuários--------------------------------
 

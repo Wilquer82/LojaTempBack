@@ -19,6 +19,7 @@ exports.getClients = async (req, res) => {
 };
 
 exports.delClient = async (data) => {
+  console.log(data)
   try {
     const clients = await Client.delClient(data.params.client);
     return res.json(clients);
