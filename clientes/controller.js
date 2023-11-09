@@ -26,3 +26,12 @@ exports.delClient = async (req, res) => {
     return res.status(500).json({ success: false, message: err.message });
   }
 };
+
+exports.putClient = async (data) => {
+  try {
+    const clients = await Client.putClient(data.body);
+    return res.json(clients);
+  } catch (err) {
+    // return res.status(500).json({ success: false, message: err.message });
+  }
+};

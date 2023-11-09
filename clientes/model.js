@@ -35,8 +35,22 @@ const delClient = async (data) => {
   }
 };
 
+const putClient = async (data) => {  
+  const db = await connection();
+
+  try {
+    const existingClient = await db.collection('Clientes').findOne({ nome: data.nome });
+    const filter = { nome : data.nome}
+    const updatedClient = await db.collection('Clientes').findOneAndUpdate(
+      filter, {$set: { cnpj: data.cnpj, endereço: data.endereço, telefone: data.telefone, obser: data.obser }});
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   saveClient,
   getClients,
   delClient,
+  putClient,
 };

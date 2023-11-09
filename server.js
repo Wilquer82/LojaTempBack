@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3001;
 const { saveUser, loginUser } = require("./users/controller");
 const { saveMoviment, getMoviment } = require("./movimento/controller");
 const connection = require("./connection.js");
-const { saveClient, getClients, delClient } = require('./clientes/controller');
+const { saveClient, getClients, delClient, putClient } = require('./clientes/controller');
 
 const options = {
     methods: ['GET','POST','PUT','DELETE'],
@@ -57,6 +57,8 @@ app.use('/clients', getClients);
 
 app.delete('/delete/:client', delClient);
 app.use('/delete/:client', delClient);
+
+app.put('/put', putClient);
 
 //-------------------------------MOVIMENTO----------------------------------
 
