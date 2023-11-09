@@ -2,10 +2,7 @@ const User = require('./model.js');
 const connection = require('../connection');
 const bcrypt = require('bcrypt');
 
-
-
 exports.saveUser = async (req, res) => {
-
   try {
     const newUser = await User.saveUser(req.body);
     res.status(201).json(newUser);
@@ -33,5 +30,8 @@ exports.loginUser = async (req, res) => {
   }
 
   res.json({ message: 'Login bem-sucedido' });
+  if (db) {
+    db.close();
+  }
 };
 
