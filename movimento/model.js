@@ -8,11 +8,7 @@ const saveMoviment = async ( data ) => {
   } catch (error) {
     console.log(error);
     return { success: false, message: 'Erro ao salvar produto' };
-  } finally {
-    if (db) {
-      db.close();
-    }
-  }
+  } 
 };
 
 const getMoviment = async () => {

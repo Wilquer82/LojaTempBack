@@ -13,10 +13,6 @@ const saveClient = async ({ data }) => {
   } catch (error) {
     console.log(error);
     return { success: false, message: 'Erro ao salvar Cliente' };
-  } finally {
-    if (db) {
-      db.close();
-    }
   }
 };
 
@@ -32,9 +28,6 @@ const delClient = async (data) => {
   } catch (error) {
     console.log(error);
   }
-  if (db) {
-    db.close();
-  }
 };
 
 const putClient = async (data) => {  
@@ -47,9 +40,6 @@ const putClient = async (data) => {
       filter, {$set: { cnpj: data.cnpj, endereço: data.endereço, telefone: data.telefone, obser: data.obser }});
   } catch (error) {
     console.log(error);
-  }
-  if (db) {
-    db.close();
   }
 };
 
