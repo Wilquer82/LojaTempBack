@@ -34,13 +34,13 @@ const putClient = async ( data ) => {
   const db = await connection();
 
   try {
-    const existingClient = await db.collection('Clientes').findOne({ nome: data.nome });
+    const existingClient = await db.collection('Clientes').findOne({ _id: data._id });
 
     if (!existingClient) {
       throw new Error('Cliente não encontrado');
     }
 
-    const filter = { nome : data.nome }
+    const filter = { _id : data._id }
     const update = { 
       $set: { 
         nome: data.nome, 
@@ -59,6 +59,7 @@ const putClient = async ( data ) => {
     throw error;
   }
 };
+
 
 
 module.exports = {
