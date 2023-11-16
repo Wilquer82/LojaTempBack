@@ -1,4 +1,6 @@
 const connection = require('../connection');
+const { ObjectId } = require('mongodb');
+
 
 const saveClient = async ({ data }) => {
   const db = await connection();
@@ -30,37 +32,21 @@ const delClient = async (data) => {
   }
 };
 
-const putClient = async ( data ) => {  
+const putClient = async (data) => {  
+  console.log(data);
+  const id = new ObjectId(data._id);
+  console.log(id);
   const db = await connection();
 
   try {
-    const existingClient = await db.collection('Clientes').findOne({ _id: data._id });
-
-    if (!existingClient) {
-      throw new Error('Cliente não encontrado');
-    }
-
-    const filter = { _id : data._id }
-    const update = { 
-      $set: { 
-        nome: data.nome, 
-        cnpj: data.cnpj, 
-        endereço: data.endereço, 
-        telefone: data.telefone, 
-        obser: data.obser 
-      }
-    };
-
-    const updatedClient = await db.collection('Clientes').findOneAndUpdate(filter, update);
-
-    return updatedClient;
+    const existingClient = await db.collection('Clientes').findOne({ _id : id });
+    const filter = { _id : id}
+    const updatedClient = await db.collection('Clientes').findOneAndUpdate(
+      filter, {$set: { nome: data.nome, cnpj: data.cnpj, endereço: data.endereço, telefone: data.telefone, obser: data.obser }});
   } catch (error) {
     console.log(error);
-    throw error;
   }
 };
-
-
 
 module.exports = {
   saveClient,
