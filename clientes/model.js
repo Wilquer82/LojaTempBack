@@ -30,18 +30,36 @@ const delClient = async (data) => {
   }
 };
 
-const putClient = async (data) => {  
+const putClient = async ( data ) => {  
   const db = await connection();
 
   try {
     const existingClient = await db.collection('Clientes').findOne({ nome: data.nome });
-    const filter = { nome : data.nome}
-    const updatedClient = await db.collection('Clientes').findOneAndUpdate(
-      filter, {$set: { cnpj: data.cnpj, endereço: data.endereço, telefone: data.telefone, obser: data.obser }});
+
+    if (!existingClient) {
+      throw new Error('Cliente não encontrado');
+    }
+
+    const filter = { nome : data.nome }
+    const update = { 
+      $set: { 
+        nome: data.nome, 
+        cnpj: data.cnpj, 
+        endereço: data.endereço, 
+        telefone: data.telefone, 
+        obser: data.obser 
+      }
+    };
+
+    const updatedClient = await db.collection('Clientes').findOneAndUpdate(filter, update);
+
+    return updatedClient;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
+
 
 module.exports = {
   saveClient,
