@@ -8,7 +8,7 @@ const OPTIONS = {
 };
 
 const MONGO_DB_URL = process.env.DB_URL;
-const DB_NAME = 'CasaTemperos';
+const DB_NAME = 'Receitas';
 
 let db = null;
 

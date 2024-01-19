@@ -1,45 +1,30 @@
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-const cors = require('cors')
+const cors = require('cors');
 const PORT = process.env.PORT || 3001;
-// const { getProducts, saveProduct, putProduct } = require("./products/controller");
+const bodyParser = require('body-parser');
+const { saveRecipe } = require("./receitas/controller");
 const { saveUser, loginUser } = require("./users/controller");
-const { saveMoviment, getMoviment } = require("./movimento/controller");
-const connection = require("./connection.js");
-const { saveClient, getClients, delClient, putClient } = require('./clientes/controller');
+const connection = require('./connection');
+
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true}));
 
 const options = {
-    methods: ['GET','POST','PUT','DELETE'],
-    origin:'*', 
-    credentials: true,  
-    optionSuccessStatus: 200,
-  }
-app.use(express.json());
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  origin: '*',
+  credentials: true,
+  optionSuccessStatus: 200,
+};
 app.use(cors(options));
 
-connection();
+app.use(express.json());
 
-//=================================PRODUTOS===================================
+app.post('/salvar', saveRecipe);
+app.use('/salvar', saveRecipe);
 
-// app.post('/post', saveProduct);
-// app.use('/post', saveProduct);
-
-// app.get('/', getProducts);
-// app.use('/get', getProducts);
-
-// app.delete('/delete/:product', delProduct);
-// app.use('/delete/:product', delProduct);
-
-// app.put('/product/:product', async (req, res) => {
-//   const produto = req.params.product;
-//   const valor = req.body;
-  
-//   const package = { produto, valor }
-//   putProduct(package);
-// });
-
-//--------------------------------Usuários--------------------------------
+//////////////////////////////////////////////////////
 
 app.post('/user', saveUser);
 app.use('/user', saveUser);
@@ -47,26 +32,39 @@ app.use('/user', saveUser);
 app.post('/login', loginUser);
 app.use('/login', loginUser);
 
-//--------------------------------Clientes--------------------------------
+// app.get('/verificarUsuario', getUser);
+// app.use('/verificarUsuario', getUser);
 
-app.post('/client', saveClient);
-app.use('/client', saveClient);
+app.get('/verificarUsuario', async (req, res) => {
+  const db = await connection();
+  const email = req.query.email;
+  const usuario = await db.collection('Users').findOne({ email: email });
+  if (usuario) {
+    res.json({ existe: true });
+  } else {
+    res.json({ existe: false });
+  }
+});
 
-app.get('/clients', getClients);
-app.use('/clients', getClients);
+app.patch('/salvarAvatar', async (req, res) => {
+  const { email, imagemBase64 } = req.body;
+  const db = await connection();
 
-app.delete('/delete/:client', delClient);
-app.use('/delete/:client', delClient);
+  const resultado = await db.collection('Users').updateOne(
+    { emaiil: email },
+    { $set: { avatar: imagemBase64 } }
+  );
 
-app.put('/put', putClient);
+  if (resultado.modifiedCount === 1) {
+    res.json({ sucesso: true });
+  } else {
+    res.status(400).json({ sucesso: false });
+  }
+});
 
-//-------------------------------MOVIMENTO----------------------------------
+// app.patch('/alter', alterUser);
+// app.use('/alter', alterUser);
 
-app.post('/moviment', saveMoviment);
-app.use('/moviment', saveMoviment);
-
-app.get('/getmov', getMoviment);
-app.use('/getmov', getMoviment);
 
 
 server.listen(PORT, () => {
