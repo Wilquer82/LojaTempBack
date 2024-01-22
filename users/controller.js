@@ -23,12 +23,13 @@ exports.getUser = async (data, res) => {
 }
 
 exports.loginUser = async (req, res) => {
-  // const db = await connection();
+  const db = await connection();
+
   const email = req.body.data.email;
   const password = req.body.data.pass;
   
   const user = await db.collection('Users').findOne({email: email });
- 
+  
   const match = await bcrypt.compare(password, user.password);
 
   if (!match) {
