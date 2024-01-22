@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 const { saveRecipe } = require("./receitas/controller");
 const { saveUser, loginUser } = require("./users/controller");
 const connection = require('./connection');
+const { ObjectId } = require('mongodb');
+
 
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({limit: '100mb', extended: true}));
@@ -47,12 +49,12 @@ app.get('/verificarUsuario', async (req, res) => {
 });
 
 app.patch('/salvarAvatar', async (req, res) => {
-  const { email, imagemBase64 } = req.body;
   const db = await connection();
+  const buffer = Buffer.from(req.body.avatar, 'base64');
 
   const resultado = await db.collection('Users').updateOne(
-    { emaiil: email },
-    { $set: { avatar: imagemBase64 } }
+    { email: req.body.email },
+    { $set: { avatar: buffer.toString('base64') } }
   );
 
   if (resultado.modifiedCount === 1) {
@@ -62,8 +64,25 @@ app.patch('/salvarAvatar', async (req, res) => {
   }
 });
 
-// app.patch('/alter', alterUser);
-// app.use('/alter', alterUser);
+
+app.patch('/atualizarUsuario/:id', async (req, res) => {
+  const db = await connection();
+  const { id } = req.params;
+  const { nome, email } = req.body;
+  
+  const NewId = new ObjectId(id)
+
+  const resultado = await db.collection('Users').updateOne(
+    { _id: NewId },
+    { $set: { user: nome, email: email } }
+  );
+
+  if (resultado.modifiedCount === 1) {
+    res.json({ sucesso: true });
+  } else {
+    res.status(400).json({ sucesso: false });
+  }
+});
 
 
 
